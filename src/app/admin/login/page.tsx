@@ -35,7 +35,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Image
-            src="/logo.png"
+            src="/logo-cupffee-without-bg.png"
             alt="Cupffee"
             width={80}
             height={80}

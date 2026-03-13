@@ -48,7 +48,7 @@ export default function BrandingSection() {
             <div className="relative">
               <div className="w-72 h-72 bg-[#4a1f0a]/50 rounded-3xl flex items-center justify-center">
                 <Image
-                  src="/logo.png"
+                  src="/logo-cupffee-without-bg.png"
                   alt="Branded Cupffee"
                   width={220}
                   height={220}

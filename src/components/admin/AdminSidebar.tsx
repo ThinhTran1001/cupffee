@@ -22,7 +22,7 @@ export default function AdminSidebar() {
       <div className="p-6 border-b border-[#6d3018]/50">
         <Link href="/admin/dashboard" className="flex items-center gap-3">
           <Image
-            src="/logo.png"
+            src="/logo-cupffee-without-bg.png"
             alt="Cupffee"
             width={40}
             height={40}

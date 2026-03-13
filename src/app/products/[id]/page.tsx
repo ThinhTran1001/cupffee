@@ -56,7 +56,7 @@ export default async function ProductDetailPage({
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#e8c49a]/20 to-[#6d3018]/10">
                   <Image
-                    src="/logo.png"
+                    src="/logo-cupffee-without-bg.png"
                     alt={product.name}
                     width={280}
                     height={280}
@@ -186,7 +186,7 @@ export default async function ProductDetailPage({
                 >
                   <div className="h-40 bg-[#f6ece0] flex items-center justify-center">
                     <Image
-                      src="/logo.png"
+                      src="/logo-cupffee-without-bg.png"
                       alt={rp.name}
                       width={100}
                       height={100}

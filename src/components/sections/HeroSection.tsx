@@ -83,7 +83,7 @@ export default function HeroSection() {
               <div className="absolute inset-0 bg-[#6d3018]/10 rounded-full blur-3xl animate-pulse" />
               <div className="relative z-10 flex items-center justify-center w-full h-full animate-float">
                 <Image
-                  src="/logo.png"
+                  src="/logo-cupffee-without-bg.png"
                   alt="Cupffee edible cup"
                   width={320}
                   height={320}

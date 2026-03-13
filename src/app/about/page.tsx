@@ -62,7 +62,7 @@ export default function AboutPage() {
             </div>
             <div className="flex justify-center lg:justify-end">
               <Image
-                src="/logo.png"
+                src="/logo-cupffee-without-bg.png"
                 alt="Cupffee"
                 width={280}
                 height={280}

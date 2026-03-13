@@ -46,7 +46,7 @@ export default function ProductSizes() {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#e8c49a]/30 to-transparent" />
                 <div className="relative z-10 flex items-center justify-center">
                   <Image
-                    src="/logo.png"
+                    src="/logo-cupffee-without-bg.png"
                     alt={size.name}
                     width={160}
                     height={160}

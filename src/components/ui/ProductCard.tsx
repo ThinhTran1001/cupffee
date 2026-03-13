@@ -22,7 +22,7 @@ export default function ProductCard({
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#e8c49a]/30 to-[#6d3018]/10">
             <Image
-              src="/logo.png"
+              src="/logo-cupffee-without-bg.png"
               alt={product.name}
               width={120}
               height={120}
