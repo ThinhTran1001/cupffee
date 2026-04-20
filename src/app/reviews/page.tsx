@@ -11,7 +11,7 @@ export default async function ReviewsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#f6ece0] pt-20">
+    <div className="min-h-screen bg-white">
       <div className="bg-[#3d1a08] py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-[#c8956c] font-semibold text-sm uppercase tracking-widest">

@@ -35,7 +35,7 @@ const milestones = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#f6ece0] pt-20">
+    <div className="min-h-screen bg-white">
       <section className="bg-[#3d1a08] py-20 lg:py-28 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#c8956c] rounded-full blur-3xl translate-x-1/3" />

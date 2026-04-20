@@ -1,128 +1,152 @@
+import { Suspense } from "react";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import ProductCard from "@/components/ui/ProductCard";
 import Link from "next/link";
+import ProductFilters from "@/components/products/ProductFilters";
+import ProductsLoadMore from "@/components/products/ProductsLoadMore";
+import type { ListingProduct } from "@/components/products/ProductListingCard";
+import HomeNewsletterBanner from "@/components/sections/home/HomeNewsletterBanner";
 
 export const dynamic = "force-dynamic";
+
+function serializeProduct(p: {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  volume: number;
+  unit: string;
+  imageUrl: string | null;
+  featured: boolean;
+  category: { name: string } | null;
+}): ListingProduct {
+  return {
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    price: p.price,
+    volume: p.volume,
+    unit: p.unit,
+    imageUrl: p.imageUrl,
+    featured: p.featured,
+    categoryName: p.category?.name ?? null,
+  };
+}
 
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; sample?: string }>;
+  searchParams: Promise<{
+    category?: string;
+    minPrice?: string;
+    maxPrice?: string;
+    volumes?: string;
+    sample?: string;
+  }>;
 }) {
   const params = await searchParams;
 
-  const products = await prisma.product.findMany({
-    where: { inStock: true },
-    include: { category: true },
-    orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
-  });
+  const priceFilter: Prisma.FloatFilter = {};
+  if (params.minPrice) {
+    const n = parseFloat(params.minPrice);
+    if (!Number.isNaN(n)) priceFilter.gte = n;
+  }
+  if (params.maxPrice) {
+    const n = parseFloat(params.maxPrice);
+    if (!Number.isNaN(n)) priceFilter.lte = n;
+  }
 
-  const categories = await prisma.category.findMany();
+  const volumeList = params.volumes
+    ? params.volumes
+        .split(",")
+        .map((s) => parseInt(s, 10))
+        .filter((n) => !Number.isNaN(n))
+    : [];
 
-  const filteredProducts = params.category
-    ? products.filter((p) => p.category?.slug === params.category)
-    : products;
+  const where: Prisma.ProductWhereInput = {
+    inStock: true,
+    ...(Object.keys(priceFilter).length > 0 && { price: priceFilter }),
+    ...(params.category
+      ? { category: { slug: params.category } }
+      : {}),
+    ...(volumeList.length > 0 ? { volume: { in: volumeList } } : {}),
+  };
+
+  const [products, categories, volumeGroups] = await Promise.all([
+    prisma.product.findMany({
+      where,
+      include: { category: true },
+      orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
+    }),
+    prisma.category.findMany({ orderBy: { name: "asc" } }),
+    prisma.product.groupBy({
+      by: ["volume"],
+      where: { inStock: true },
+      orderBy: { volume: "asc" },
+    }),
+  ]);
+
+  const volumes = volumeGroups.map((g) => g.volume);
+  const serialized = products.map(serializeProduct);
 
   return (
-    <div className="min-h-screen bg-[#f6ece0] pt-24">
-      <div className="bg-[#3d1a08] py-16 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-[#c8956c] font-semibold text-sm uppercase tracking-widest">
-            Our Collection
-          </span>
-          <h1 className="text-4xl lg:text-6xl font-bold text-white mt-3 mb-4">
-            Edible Cupffee Cups
-          </h1>
-          <p className="text-[#c8956c] text-lg max-w-2xl mx-auto">
-            Discover our range of sustainable, edible cups. Perfect for coffee,
-            tea, and more.
-          </p>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
         {params.sample && (
-          <div className="bg-[#6d3018] text-[#f6ece0] rounded-2xl p-6 mb-8 flex items-center gap-4">
-            <span className="text-3xl">🎁</span>
-            <div>
-              <h3 className="font-bold text-lg">Request a Sample Pack</h3>
-              <p className="text-[#e8c49a] text-sm">
-                Try Cupffee before you commit — 10 small + 12 large cups for
-                just €13.29
+          <div className="mb-8 flex flex-wrap items-center gap-4 rounded-xl border border-[#4a2c20]/20 bg-white p-5 shadow-sm">
+            <span className="text-2xl" aria-hidden>
+              🎁
+            </span>
+            <div className="min-w-0 flex-1">
+              <h3 className="font-bold text-[#4a2c20]">Gói dùng thử</h3>
+              <p className="text-sm text-[#5c4033]/80">
+                Liên hệ để đặt sample pack — trải nghiệm CUPFFEE trước khi đặt số
+                lượng lớn.
               </p>
             </div>
             <Link
               href="/contact"
-              className="ml-auto bg-[#f6ece0] text-[#6d3018] px-5 py-2 rounded-full text-sm font-semibold hover:bg-white transition-colors flex-shrink-0"
+              className="shrink-0 rounded-sm border-2 border-[#4a2c20] bg-[#4a2c20] px-5 py-2 text-sm font-semibold text-white hover:bg-[#3d2418] transition-colors"
             >
-              Get Sample
+              Liên hệ
             </Link>
           </div>
         )}
 
-        {categories.length > 0 && (
-          <div className="flex flex-wrap gap-3 mb-8">
-            <Link
-              href="/products"
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                !params.category
-                  ? "bg-[#6d3018] text-[#f6ece0]"
-                  : "bg-white text-[#6d3018] hover:bg-[#6d3018] hover:text-[#f6ece0] border border-[#e8d5c0]"
-              }`}
-            >
-              All Products
-            </Link>
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/products?category=${cat.slug}`}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                  params.category === cat.slug
-                    ? "bg-[#6d3018] text-[#f6ece0]"
-                    : "bg-white text-[#6d3018] hover:bg-[#6d3018] hover:text-[#f6ece0] border border-[#e8d5c0]"
-                }`}
-              >
-                {cat.name}
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-14">
+          <aside className="w-full lg:w-64 shrink-0">
+            <Suspense fallback={<div className="h-48 animate-pulse rounded bg-neutral-100" />}>
+              <ProductFilters categories={categories} volumes={volumes} />
+            </Suspense>
+          </aside>
 
-        {filteredProducts.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="text-6xl mb-4">☕</div>
-            <h3 className="text-2xl font-bold text-[#3d1a08] mb-2">
-              No products yet
-            </h3>
-            <p className="text-[#6d3018]/70">
-              Check back soon for our amazing edible cups!
-            </p>
+          <div className="flex-1 min-w-0">
+            {serialized.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-[#4a2c20]/30 bg-white py-20 text-center px-4">
+                <div className="text-5xl mb-4" aria-hidden>
+                  ☕
+                </div>
+                <h3 className="text-xl font-bold text-[#4a2c20] mb-2">
+                  Không có sản phẩm phù hợp
+                </h3>
+                <p className="text-[#5c4033]/80 text-sm max-w-md mx-auto mb-6">
+                  Thử bỏ bớt bộ lọc hoặc chọn danh mục khác.
+                </p>
+                <Link
+                  href="/products"
+                  className="inline-block text-sm font-semibold text-[#4a2c20] underline underline-offset-4"
+                >
+                  Xóa bộ lọc
+                </Link>
+              </div>
+            ) : (
+              <ProductsLoadMore products={serialized} />
+            )}
           </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
-
-        <div className="mt-16 bg-[#3d1a08] rounded-3xl p-10 text-center">
-          <h3 className="text-3xl font-bold text-[#e8c49a] mb-3">
-            Bulk Delights for Businesses
-          </h3>
-          <p className="text-[#c8956c] mb-6 max-w-xl mx-auto">
-            Unlock exclusive discounts on larger orders. Elevate your business
-            with our edible cups and enjoy cost savings that scale with your
-            success.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-block bg-[#e8c49a] text-[#3d1a08] px-8 py-4 rounded-full font-bold hover:bg-[#f6ece0] transition-colors"
-          >
-            Get Bulk Pricing
-          </Link>
         </div>
       </div>
+
+      <HomeNewsletterBanner />
     </div>
   );
 }

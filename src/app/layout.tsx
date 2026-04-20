@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ChatFab from "@/components/layout/ChatFab";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,11 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} bg-[#f6ece0] text-[#3d1a08] antialiased`}>
+    <html lang="vi">
+      <body
+        className={`${inter.className} bg-white text-[#3d1a08] antialiased`}
+      >
         <Header />
-        <main>{children}</main>
+        <main className="min-h-screen pt-20 lg:pt-[5.5rem]">{children}</main>
         <Footer />
+        <ChatFab />
       </body>
     </html>
   );

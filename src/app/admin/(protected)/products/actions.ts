@@ -23,6 +23,7 @@ export type ProductFormInput = {
   features: string[];
   inStock: boolean;
   featured: boolean;
+  limitedEdition: boolean;
   categoryId: string | null;
 };
 
@@ -47,6 +48,7 @@ export async function saveProductAction(
     features,
     inStock,
     featured,
+    limitedEdition,
     categoryId,
   } = input;
 
@@ -76,11 +78,13 @@ export async function saveProductAction(
           features: features || [],
           inStock: inStock ?? true,
           featured: featured ?? false,
+          limitedEdition: limitedEdition ?? false,
           categoryId: categoryId || null,
         },
       });
+      revalidatePath(`/products/${existingId}`);
     } else {
-      await prisma.product.create({
+      const created = await prisma.product.create({
         data: {
           name,
           slug,
@@ -92,13 +96,17 @@ export async function saveProductAction(
           features: features || [],
           inStock: inStock ?? true,
           featured: featured ?? false,
+          limitedEdition: limitedEdition ?? false,
           categoryId: categoryId || null,
         },
       });
+      revalidatePath(`/products/${created.id}`);
     }
 
+    revalidatePath("/");
     revalidatePath("/admin/products");
     revalidatePath("/admin/dashboard");
+    revalidatePath("/products");
 
     return { ok: true };
   } catch (error) {
@@ -113,8 +121,10 @@ export async function deleteProductAction(productId: string) {
   try {
     await prisma.product.delete({ where: { id: productId } });
 
+    revalidatePath("/");
     revalidatePath("/admin/products");
     revalidatePath("/admin/dashboard");
+    revalidatePath("/products");
   } catch (error) {
     console.error("Error deleting product:", error);
     throw new Error("Failed to delete product");

@@ -69,6 +69,7 @@ async function main() {
       ],
       inStock: true,
       featured: true,
+      limitedEdition: false,
       categoryId: smallCups.id,
     },
     {
@@ -89,6 +90,7 @@ async function main() {
       ],
       inStock: true,
       featured: true,
+      limitedEdition: true,
       categoryId: largeCups.id,
     },
     {
@@ -108,6 +110,7 @@ async function main() {
       ],
       inStock: true,
       featured: false,
+      limitedEdition: true,
       categoryId: samplePacks.id,
     },
     {
@@ -127,6 +130,7 @@ async function main() {
       ],
       inStock: true,
       featured: false,
+      limitedEdition: false,
       categoryId: smallCups.id,
     },
     {
@@ -146,6 +150,7 @@ async function main() {
       ],
       inStock: true,
       featured: false,
+      limitedEdition: true,
       categoryId: largeCups.id,
     },
   ];
@@ -153,7 +158,9 @@ async function main() {
   for (const product of products) {
     await prisma.product.upsert({
       where: { slug: product.slug },
-      update: {},
+      update: {
+        limitedEdition: product.limitedEdition,
+      },
       create: product,
     });
   }

@@ -11,7 +11,7 @@
 }
 
 :root {
-  --background: #f6ece0;
+  --background: #ffffff;
   --foreground: #3d1a08;
 }
 
@@ -20,7 +20,7 @@
 }
 
 body {
-  background: var(--background);
+  background: #ffffff;
   color: var(--foreground);
   font-family: "Inter", system-ui, sans-serif;
 }

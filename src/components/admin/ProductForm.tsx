@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Category, Product } from "@prisma/client";
+import Image from "next/image";
 import Link from "next/link";
 
 interface Props {
@@ -20,6 +21,7 @@ interface Props {
       features: string[];
       inStock: boolean;
       featured: boolean;
+      limitedEdition: boolean;
       categoryId: string | null;
     },
     existingId?: string
@@ -41,12 +43,46 @@ export default function ProductForm({ categories, product, onSubmit }: Props) {
     features: product?.features?.join("\n") ?? "",
     inStock: product?.inStock ?? true,
     featured: product?.featured ?? false,
+    limitedEdition: product?.limitedEdition ?? false,
     categoryId: product?.categoryId ?? "",
   });
 
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
+
+  const uploadImageToCloudinary = async (file: File) => {
+    setUploadingImage(true);
+    setError("");
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch("/api/admin/upload", {
+      method: "POST",
+      body: fd,
+      credentials: "same-origin",
+    });
+    const data = (await res.json()) as { url?: string; error?: string };
+    setUploadingImage(false);
+    if (!res.ok) {
+      throw new Error(data.error || "Upload failed");
+    }
+    if (!data.url) {
+      throw new Error("No image URL returned");
+    }
+    setFormData((prev) => ({ ...prev, imageUrl: data.url! }));
+  };
+
+  const handleImageFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    try {
+      await uploadImageToCloudinary(file);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed");
+    }
+  };
 
   const generateSlug = (name: string) =>
     name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -228,19 +264,55 @@ export default function ProductForm({ categories, product, onSubmit }: Props) {
           Media & Features
         </h2>
 
-        <div>
+        <div className="space-y-3">
           <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-            Image URL
+            Product image
           </label>
-          <input
-            type="url"
-            value={formData.imageUrl}
-            onChange={(e) =>
-              setFormData({ ...formData, imageUrl: e.target.value })
-            }
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#6d3018]"
-            placeholder="https://example.com/image.jpg"
-          />
+          <p className="text-xs text-gray-500 mb-2">
+            Ảnh được tải lên Cloudinary (JPEG, PNG, WebP, GIF — tối đa 8MB).
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:border-[#6d3018] hover:bg-amber-50/50">
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className="sr-only"
+                disabled={uploadingImage || loading || isPending}
+                onChange={handleImageFile}
+              />
+              {uploadingImage ? "Đang tải lên…" : "Chọn ảnh & tải lên Cloudinary"}
+            </label>
+            {formData.imageUrl ? (
+              <button
+                type="button"
+                className="text-sm text-red-600 hover:underline"
+                onClick={() =>
+                  setFormData((prev) => ({ ...prev, imageUrl: "" }))
+                }
+              >
+                Xóa ảnh
+              </button>
+            ) : null}
+          </div>
+          {formData.imageUrl ? (
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-start">
+              <div className="relative h-36 w-36 shrink-0 overflow-hidden rounded-xl border border-gray-200">
+                <Image
+                  src={formData.imageUrl}
+                  alt="Preview"
+                  fill
+                  sizes="144px"
+                  className="object-cover"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-gray-500">URL đã lưu</p>
+                <p className="break-all text-xs text-gray-600 mt-1">
+                  {formData.imageUrl}
+                </p>
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <div>
@@ -282,6 +354,21 @@ export default function ProductForm({ categories, product, onSubmit }: Props) {
             />
             <span className="text-sm font-medium text-gray-700">
               Featured Product
+            </span>
+          </label>
+
+          <label className="flex max-w-md cursor-pointer items-start gap-2">
+            <input
+              type="checkbox"
+              checked={formData.limitedEdition}
+              onChange={(e) =>
+                setFormData({ ...formData, limitedEdition: e.target.checked })
+              }
+              className="mt-0.5 h-4 w-4 shrink-0 accent-[#6d3018] rounded"
+            />
+            <span className="text-sm font-medium text-gray-700">
+              Limited edition (hiển thị ở mục &quot;Sản phẩm giới hạn&quot; trên
+              trang chủ)
             </span>
           </label>
         </div>

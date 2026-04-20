@@ -1,27 +1,23 @@
-import HeroSection from "@/components/sections/HeroSection";
-import WhyCupffee from "@/components/sections/WhyCupffee";
-import ProductSizes from "@/components/sections/ProductSizes";
-import StatsSection from "@/components/sections/StatsSection";
-import BrandingSection from "@/components/sections/BrandingSection";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
-import SamplePackSection from "@/components/sections/SamplePackSection";
-import SuitableFor from "@/components/sections/SuitableFor";
-import BlogPreview from "@/components/sections/BlogPreview";
-import CustomerLoveSection from "@/components/sections/CustomerLoveSection";
+import HomeHero from "@/components/sections/home/HomeHero";
+import HomeProductGrids from "@/components/sections/home/HomeProductGrids";
+import HomeNewCollection from "@/components/sections/home/HomeNewCollection";
+import HomeEcoStatement from "@/components/sections/home/HomeEcoStatement";
+import HomeCommitment from "@/components/sections/home/HomeCommitment";
+import HomeCustomers from "@/components/sections/home/HomeCustomers";
+import HomeNewsletterBanner from "@/components/sections/home/HomeNewsletterBanner";
+
+export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
     <>
-      <HeroSection />
-      <WhyCupffee />
-      <ProductSizes />
-      <StatsSection />
-      <BrandingSection />
-      <SuitableFor />
-      <SamplePackSection />
-      <TestimonialsSection />
-      <CustomerLoveSection />
-      <BlogPreview />
+      <HomeHero />
+      <HomeProductGrids />
+      <HomeNewCollection />
+      <HomeEcoStatement />
+      <HomeCommitment />
+      <HomeCustomers />
+      <HomeNewsletterBanner />
     </>
   );
 }

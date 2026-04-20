@@ -36,9 +36,11 @@ model Product {
   imageUrl    String?
   images      String[]
   features    String[]
-  inStock     Boolean  @default(true)
-  featured    Boolean  @default(false)
-  categoryId  String?
+  inStock         Boolean  @default(true)
+  featured        Boolean  @default(false)
+  /// Hiển thị ở khối “Sản phẩm giới hạn” trên trang chủ
+  limitedEdition  Boolean  @default(false)
+  categoryId      String?
   category    Category? @relation(fields: [categoryId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -79,5 +81,14 @@ model ContactMessage {
   company   String?
   message   String
   read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+/// Lời nhắn gắn với một mã QR — mỗi bản ghi một link riêng /m/[id]
+model QrMessage {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  fontSize  Int      @default(16)
+  color     String   @default("#4a2c20")
   createdAt DateTime @default(now())
 }

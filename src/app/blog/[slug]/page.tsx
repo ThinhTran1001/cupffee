@@ -118,7 +118,7 @@ export default async function BlogPostPage({
   if (!post) notFound();
 
   return (
-    <div className="min-h-screen bg-[#f6ece0] pt-20">
+    <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <nav className="flex items-center gap-2 text-sm text-[#6d3018]/60 mb-8">
           <Link href="/" className="hover:text-[#6d3018]">
