@@ -46,11 +46,11 @@ export default function ProductSizes() {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#e8c49a]/30 to-transparent" />
                 <div className="relative z-10 flex items-center justify-center">
                   <Image
-                    src="/logo-cupffee-without-bg.png"
+                    src="/CUPFFEE.png"
                     alt={size.name}
-                    width={160}
-                    height={160}
-                    className="w-32 h-32 object-contain opacity-80 group-hover:scale-110 transition-transform duration-300"
+                    width={1024}
+                    height={1024}
+                    className="w-32 h-32 object-contain object-bottom opacity-80 group-hover:scale-110 transition-transform duration-300"
                   />
                   <div className="absolute -bottom-2 right-8 bg-[#6d3018] text-[#f6ece0] text-xs font-bold px-3 py-1 rounded-full">
                     {size.volume}

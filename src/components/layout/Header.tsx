@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import CheckerboardStrip from "@/components/ui/CheckerboardStrip";
 import {
   readCart,
@@ -92,9 +93,17 @@ export default function Header() {
           <div className="flex h-16 items-center justify-between lg:h-[4.5rem]">
             <Link
               href="/"
-              className="text-xl font-bold uppercase tracking-tight text-[#4B2C20] lg:text-2xl"
+              className="inline-flex items-center"
+              aria-label="CUPFFEE"
             >
-              CUPFFEE
+              <Image
+                src="/CUPFFEE.png"
+                alt="CUPFFEE"
+                width={420}
+                height={100}
+                className="h-50 w-auto object-contain"
+                priority
+              />
             </Link>
 
             <div className="hidden items-center gap-10 lg:flex">

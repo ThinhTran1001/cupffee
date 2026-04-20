@@ -34,7 +34,7 @@ function toListingProduct(p: {
 
 export default async function CartPage() {
   const products = await prisma.product.findMany({
-    where: { inStock: true },
+    where: { inStock: true, limitedEdition: true },
     take: 3,
     include: { category: true },
     orderBy: [{ featured: "desc" }, { createdAt: "desc" }],

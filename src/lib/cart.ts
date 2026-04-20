@@ -3,7 +3,7 @@ export const CART_UPDATE_EVENT = "cupffee-cart-update";
 export type CartLine = {
   productId: string;
   quantity: number;
-  /** Tên hiển thị (EUR đơn vị trong DB) */
+  /** Tên và đơn giá hiển thị trong giỏ (VND) */
   name?: string;
   price?: number;
   imageUrl?: string | null;
@@ -95,4 +95,9 @@ export function setCartLineQuantity(productId: string, quantity: number) {
 
 export function cartTotalQuantity(cart: CartLine[]): number {
   return cart.reduce((s, l) => s + l.quantity, 0);
+}
+
+export function clearCart() {
+  if (typeof window === "undefined") return;
+  writeCart([]);
 }

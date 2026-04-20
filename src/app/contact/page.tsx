@@ -72,9 +72,9 @@ export default function ContactPage() {
 
             <div className="space-y-5">
               {[
-                { icon: "📧", label: "Email", value: "info@cupffee.me" },
-                { icon: "📞", label: "Phone", value: "+359 884 931 183" },
-                { icon: "📍", label: "Location", value: "Bulgaria, Europe" },
+                { icon: "📧", label: "Email", value: "cupffeevn@gmail.com" },
+                { icon: "📞", label: "Phone", value: "0868239668" },
+                { icon: "📍", label: "Location", value: "9 Dịch Vọng Hậu, Cầu Giấy, Hà Nội" },
                 {
                   icon: "🕐",
                   label: "Response Time",

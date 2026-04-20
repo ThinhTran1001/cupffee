@@ -10,7 +10,7 @@ import ProductListingCard, {
   type ListingProduct,
 } from "@/components/products/ProductListingCard";
 import HomeNewsletterBanner from "@/components/sections/home/HomeNewsletterBanner";
-import { formatPriceVndFromEur } from "@/lib/formatPrice";
+import { convertEurToVnd, formatPriceVndFromEur } from "@/lib/formatPrice";
 
 function toListingProduct(p: {
   id: string;
@@ -120,7 +120,7 @@ export default async function ProductDetailPage({
                 productId={product.id}
                 disabled={!product.inStock}
                 productName={product.name}
-                priceEur={product.price}
+                priceVnd={convertEurToVnd(product.price)}
                 imageUrl={product.imageUrl}
               />
 

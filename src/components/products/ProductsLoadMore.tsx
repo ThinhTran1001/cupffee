@@ -14,7 +14,7 @@ export default function ProductsLoadMore({ products }: { products: ListingProduc
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
         {slice.map((p) => (
-          <ProductListingCard key={p.id} product={p} />
+          <ProductListingCard key={p.id} product={p} priceDisplay="vnd" />
         ))}
       </div>
       {hasMore && (

@@ -8,10 +8,11 @@ import {
   readCart,
   removeFromCart,
   setCartLineQuantity,
+  clearCart,
   CART_UPDATE_EVENT,
   type CartLine,
 } from "@/lib/cart";
-import { formatPriceVndFromEur } from "@/lib/formatPrice";
+import { convertEurToVnd, formatPriceVnd } from "@/lib/formatPrice";
 import CheckerboardStrip from "@/components/ui/CheckerboardStrip";
 import ProductListingCard, {
   type ListingProduct,
@@ -19,7 +20,7 @@ import ProductListingCard, {
 
 type ResolvedLine = CartLine & {
   name: string;
-  unitPriceEur: number;
+  unitPriceVnd: number;
   imageUrl: string | null;
 };
 
@@ -31,6 +32,9 @@ export default function CartPageClient({
   const router = useRouter();
   const [lines, setLines] = useState<ResolvedLine[]>([]);
   const [loading, setLoading] = useState(true);
+  const [ordering, setOrdering] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
+  const [orderCode, setOrderCode] = useState<string | null>(null);
 
   const resolveCart = useCallback(async () => {
     const raw = readCart();
@@ -38,7 +42,13 @@ export default function CartPageClient({
 
     for (const line of raw) {
       let name = line.name ?? "";
-      let unitPriceEur = line.price ?? 0;
+      // Backward compatible: older carts may still store EUR unit price.
+      let unitPriceVnd =
+        typeof line.price === "number"
+          ? line.price < 1000
+            ? convertEurToVnd(line.price)
+            : line.price
+          : 0;
       let imageUrl: string | null = line.imageUrl ?? null;
 
       if (!name || !line.price) {
@@ -51,7 +61,7 @@ export default function CartPageClient({
               imageUrl: string | null;
             };
             name = p.name;
-            unitPriceEur = p.price;
+            unitPriceVnd = convertEurToVnd(p.price);
             imageUrl = p.imageUrl;
           }
         } catch {
@@ -64,7 +74,7 @@ export default function CartPageClient({
       out.push({
         ...line,
         name,
-        unitPriceEur,
+        unitPriceVnd,
         imageUrl,
       });
     }
@@ -86,10 +96,43 @@ export default function CartPageClient({
     return () => window.removeEventListener(CART_UPDATE_EVENT, onUpdate);
   }, [resolveCart]);
 
-  const totalEur = lines.reduce(
-    (s, l) => s + l.unitPriceEur * l.quantity,
+  const totalVnd = lines.reduce(
+    (s, l) => s + l.unitPriceVnd * l.quantity,
     0
   );
+
+  const handlePlaceOrder = async () => {
+    if (ordering || lines.length === 0) return;
+    setOrderError(null);
+    setOrdering(true);
+    try {
+      const res = await fetch("/api/storefront/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lines: lines.map((line) => ({
+            productId: line.productId,
+            quantity: line.quantity,
+          })),
+        }),
+      });
+      const data = (await res.json()) as { code?: string; error?: string };
+      if (!res.ok) {
+        throw new Error(data.error || "Không tạo được đơn hàng.");
+      }
+
+      clearCart();
+      setLines([]);
+      setOrderCode(data.code ?? null);
+      router.push("/order/qr");
+    } catch (error) {
+      setOrderError(
+        error instanceof Error ? error.message : "Đã xảy ra lỗi khi đặt hàng."
+      );
+    } finally {
+      setOrdering(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#faf8f5] pb-16">
@@ -180,7 +223,7 @@ export default function CartPageClient({
                           </span>
                         </td>
                         <td className="align-middle py-6 text-center tabular-nums text-[#4a2c20]">
-                          {formatPriceVndFromEur(line.unitPriceEur)}
+                          {formatPriceVnd(line.unitPriceVnd)}
                         </td>
                         <td className="align-middle py-6">
                           <div className="flex justify-center">
@@ -218,9 +261,7 @@ export default function CartPageClient({
                           </div>
                         </td>
                         <td className="align-middle py-6 pr-4 text-right font-bold tabular-nums text-[#4a2c20]">
-                          {formatPriceVndFromEur(
-                            line.unitPriceEur * line.quantity
-                          )}
+                          {formatPriceVnd(line.unitPriceVnd * line.quantity)}
                         </td>
                       </tr>
                     ))}
@@ -232,17 +273,28 @@ export default function CartPageClient({
             <div className="mt-10 flex items-center justify-between border-t border-[#e8dfd6] pt-8">
               <span className="text-lg font-bold text-[#1a1a1a]">Tổng</span>
               <span className="text-2xl font-bold tabular-nums text-[#4a2c20]">
-                {formatPriceVndFromEur(totalEur)}
+                {formatPriceVnd(totalVnd)}
               </span>
             </div>
 
             <div className="mx-auto mt-10 flex max-w-xl flex-col gap-4">
+              {orderCode ? (
+                <p className="rounded-sm border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+                  Đặt hàng thành công: <span className="font-bold">{orderCode}</span>
+                </p>
+              ) : null}
+              {orderError ? (
+                <p className="rounded-sm border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                  {orderError}
+                </p>
+              ) : null}
               <button
                 type="button"
-                onClick={() => router.push("/order/qr")}
+                onClick={handlePlaceOrder}
+                disabled={ordering}
                 className="w-full rounded-sm bg-[#4a2c20] py-4 text-center text-sm font-bold tracking-wide text-white shadow-sm transition hover:bg-[#3d2418]"
               >
-                Mua Sản Phẩm
+                {ordering ? "Đang gửi đơn…" : "Mua Sản Phẩm"}
               </button>
               <Link
                 href="/products"

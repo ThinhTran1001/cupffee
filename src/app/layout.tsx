@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Cupffee — The World's First Edible Cup",
     description: "Tasty as a cookie. Green as the planet.",
-    images: ["/logo-cupffee-without-bg.png"],
+    images: ["/CUPFFEE.png"],
   },
 };
 

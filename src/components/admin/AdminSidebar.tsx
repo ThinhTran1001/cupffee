@@ -21,13 +21,15 @@ export default function AdminSidebar() {
     <aside className="w-64 bg-[#3d1a08] min-h-screen flex flex-col flex-shrink-0">
       <div className="p-6 border-b border-[#6d3018]/50">
         <Link href="/admin/dashboard" className="flex items-center gap-3">
-          <Image
-            src="/logo-cupffee-without-bg.png"
-            alt="Cupffee"
-            width={40}
-            height={40}
-            className="w-8 h-8 object-contain brightness-0 invert opacity-80"
-          />
+          <div className="h-8 w-[140px] overflow-hidden">
+            <Image
+              src="/CUPFFEE.png"
+              alt="Cupffee"
+              width={1024}
+              height={1024}
+              className="h-14 w-auto object-contain object-bottom"
+            />
+          </div>
           <div>
             <div className="text-white font-bold text-sm">CUPFFEE</div>
             <div className="text-[#c8956c] text-xs">Admin Panel</div>

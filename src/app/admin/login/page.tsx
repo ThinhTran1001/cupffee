@@ -34,13 +34,15 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-[#3d1a08] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Image
-            src="/logo-cupffee-without-bg.png"
-            alt="Cupffee"
-            width={80}
-            height={80}
-            className="w-16 h-16 object-contain mx-auto mb-4 brightness-0 invert opacity-80"
-          />
+          <div className="mx-auto mb-4 h-12 w-[220px] overflow-hidden">
+            <Image
+              src="/CUPFFEE.png"
+              alt="Cupffee"
+              width={1024}
+              height={1024}
+              className="h-20 w-auto object-contain object-bottom"
+            />
+          </div>
           <h1 className="text-3xl font-bold text-white">Admin Portal</h1>
           <p className="text-[#c8956c] mt-1 text-sm">
             Sign in to manage your Cupffee store

@@ -48,11 +48,11 @@ export default function BrandingSection() {
             <div className="relative">
               <div className="w-72 h-72 bg-[#4a1f0a]/50 rounded-3xl flex items-center justify-center">
                 <Image
-                  src="/logo-cupffee-without-bg.png"
+                  src="/CUPFFEE.png"
                   alt="Branded Cupffee"
-                  width={220}
-                  height={220}
-                  className="w-44 h-44 object-contain brightness-0 invert opacity-60"
+                  width={1024}
+                  height={1024}
+                  className="w-44 h-44 object-contain object-bottom opacity-80"
                 />
               </div>
               <div className="absolute -top-4 -right-4 bg-[#e8c49a] rounded-2xl px-4 py-2 text-[#3d1a08] text-sm font-bold shadow-lg">

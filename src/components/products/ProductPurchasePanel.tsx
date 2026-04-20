@@ -9,14 +9,14 @@ export default function ProductPurchasePanel({
   productId,
   disabled,
   productName,
-  priceEur,
+  priceVnd,
   imageUrl,
 }: {
   productId: string;
   disabled?: boolean;
   /** Truyền để hiển thị đúng trong giỏ (không cần gọi API) */
   productName?: string;
-  priceEur?: number;
+  priceVnd?: number;
   imageUrl?: string | null;
 }) {
   const [qty, setQty] = useState(1);
@@ -26,7 +26,7 @@ export default function ProductPurchasePanel({
     if (disabled) return;
     addToCart(productId, qty, {
       ...(productName != null ? { name: productName } : {}),
-      ...(priceEur != null ? { price: priceEur } : {}),
+      ...(priceVnd != null ? { price: priceVnd } : {}),
       imageUrl: imageUrl ?? null,
     });
     setFeedback("added");

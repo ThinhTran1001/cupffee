@@ -83,11 +83,11 @@ export default function HeroSection() {
               <div className="absolute inset-0 bg-[#6d3018]/10 rounded-full blur-3xl animate-pulse" />
               <div className="relative z-10 flex items-center justify-center w-full h-full animate-float">
                 <Image
-                  src="/logo-cupffee-without-bg.png"
+                  src="/CUPFFEE.png"
                   alt="Cupffee edible cup"
-                  width={320}
-                  height={320}
-                  className="w-64 h-64 lg:w-80 lg:h-80 object-contain drop-shadow-2xl"
+                  width={1024}
+                  height={1024}
+                  className="w-64 h-64 lg:w-80 lg:h-80 object-contain object-bottom drop-shadow-2xl"
                   priority
                 />
               </div>

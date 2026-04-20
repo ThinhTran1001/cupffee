@@ -22,11 +22,11 @@ export default function ProductCard({
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#e8c49a]/30 to-[#6d3018]/10">
             <Image
-              src="/logo-cupffee-without-bg.png"
+              src="/CUPFFEE.png"
               alt={product.name}
-              width={120}
-              height={120}
-              className="w-24 h-24 object-contain opacity-60 group-hover:scale-110 transition-transform duration-300"
+              width={1024}
+              height={1024}
+              className="w-24 h-24 object-contain object-bottom opacity-60 group-hover:scale-110 transition-transform duration-300"
             />
           </div>
         )}
