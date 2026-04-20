@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import AdminProductActions from "@/components/admin/AdminProductActions";
 import { deleteProductAction } from "./actions";
+import { formatPriceVndFromEur } from "@/lib/formatPrice";
 
 export const dynamic = "force-dynamic";
 
@@ -88,7 +89,7 @@ export default async function AdminProductsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <span className="font-semibold text-gray-900 text-sm">
-                        €{product.price.toFixed(2)}
+                        {formatPriceVndFromEur(product.price)}
                       </span>
                     </td>
                     <td className="px-6 py-4">

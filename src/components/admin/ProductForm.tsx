@@ -6,6 +6,8 @@ import { Category, Product } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
+const EUR_TO_VND = 26_000;
+
 interface Props {
   categories: Category[];
   product?: Product;
@@ -36,7 +38,9 @@ export default function ProductForm({ categories, product, onSubmit }: Props) {
     name: product?.name ?? "",
     slug: product?.slug ?? "",
     description: product?.description ?? "",
-    price: product?.price?.toString() ?? "",
+    price: product?.price
+      ? Math.round(product.price * EUR_TO_VND).toString()
+      : "",
     volume: product?.volume?.toString() ?? "",
     unit: product?.unit ?? "ml",
     imageUrl: product?.imageUrl ?? "",
@@ -91,9 +95,10 @@ export default function ProductForm({ categories, product, onSubmit }: Props) {
     e.preventDefault();
     setError("");
 
+    const priceVnd = parseFloat(formData.price);
     const payload = {
       ...formData,
-      price: parseFloat(formData.price),
+      price: priceVnd / EUR_TO_VND,
       volume: parseInt(formData.volume),
       features: formData.features.split("\n").filter(Boolean),
       categoryId: formData.categoryId || null,
@@ -187,19 +192,19 @@ export default function ProductForm({ categories, product, onSubmit }: Props) {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Price (€) *
+              Price (VNĐ) *
             </label>
             <input
               type="number"
               required
-              step="0.01"
+              step="1000"
               min="0"
               value={formData.price}
               onChange={(e) =>
                 setFormData({ ...formData, price: e.target.value })
               }
               className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#6d3018]"
-              placeholder="13.29"
+              placeholder="345000"
             />
           </div>
 
