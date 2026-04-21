@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Xem và chỉnh sửa giỏ hàng của bạn.",
 };
 
+export const dynamic = "force-dynamic";
+
 function toListingProduct(p: {
   id: string;
   name: string;

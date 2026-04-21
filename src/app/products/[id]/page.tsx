@@ -12,6 +12,8 @@ import ProductListingCard, {
 import HomeNewsletterBanner from "@/components/sections/home/HomeNewsletterBanner";
 import { convertEurToVnd, formatPriceVndFromEur } from "@/lib/formatPrice";
 
+export const dynamic = "force-dynamic";
+
 function toListingProduct(p: {
   id: string;
   name: string;
