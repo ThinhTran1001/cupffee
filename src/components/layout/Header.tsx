@@ -118,7 +118,15 @@ export default function Header() {
                   </Link>
                 ))}
               </nav>
-              <CartLinkHeader cartCount={cartCount} />
+              <div className="flex items-center gap-6 border-l border-[#e8dfd6] pl-6">
+                <Link
+                  href="/admin/login"
+                  className="text-xs font-semibold tracking-wide text-[#4B2C20] hover:text-[#4B2C20]/75 transition-colors sm:text-sm"
+                >
+                  ĐĂNG NHẬP
+                </Link>
+                <CartLinkHeader cartCount={cartCount} />
+              </div>
             </div>
 
             <button
@@ -154,7 +162,19 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-1">
+              <div className="pt-2 flex flex-col gap-4">
+                <Link
+                  href="/admin/login"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="inline-flex items-center gap-2 text-[#4B2C20] text-sm font-semibold tracking-wide transition-opacity hover:opacity-80"
+                >
+                  <span className="flex h-7 min-w-7 shrink-0 items-center justify-center rounded-full border border-transparent px-1.5 text-[13px] leading-none" />
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-[#4B2C20]">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  ĐĂNG NHẬP
+                </Link>
                 <CartLinkHeader
                   cartCount={cartCount}
                   onNavigate={() => setIsMenuOpen(false)}
