@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -23,7 +22,7 @@ export default function AdminLoginPage() {
     });
 
     if (result?.error) {
-      setError("Invalid email or password");
+      setError("Email hoặc mật khẩu không chính xác");
       setLoading(false);
     } else {
       router.push("/admin/dashboard");
@@ -34,18 +33,9 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-[#3d1a08] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="mx-auto mb-4 h-12 w-[220px] overflow-hidden">
-            <Image
-              src="/CUPFFEE.png"
-              alt="Cupffee"
-              width={1024}
-              height={1024}
-              className="h-20 w-auto object-contain object-bottom"
-            />
-          </div>
-          <h1 className="text-3xl font-bold text-white">Admin Portal</h1>
+          <h1 className="text-3xl font-bold text-white">Quản Trị Hệ Thống</h1>
           <p className="text-[#c8956c] mt-1 text-sm">
-            Sign in to manage your Cupffee store
+            Đăng nhập để quản lý cửa hàng CUPFFEE
           </p>
         </div>
 
@@ -61,7 +51,7 @@ export default function AdminLoginPage() {
 
           <div>
             <label className="block text-sm font-semibold text-[#3d1a08] mb-1.5">
-              Email Address
+              Địa Chỉ Email
             </label>
             <input
               type="email"
@@ -71,13 +61,13 @@ export default function AdminLoginPage() {
                 setFormData({ ...formData, email: e.target.value })
               }
               className="w-full border border-[#e8d5c0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#6d3018] bg-white text-[#3d1a08]"
-              placeholder="admin@cupffee.me"
+              placeholder="Email..."
             />
           </div>
 
           <div>
             <label className="block text-sm font-semibold text-[#3d1a08] mb-1.5">
-              Password
+              Mật Khẩu
             </label>
             <input
               type="password"
@@ -96,14 +86,9 @@ export default function AdminLoginPage() {
             disabled={loading}
             className="w-full bg-[#6d3018] text-[#f6ece0] py-4 rounded-xl font-bold hover:bg-[#8b4513] transition-colors disabled:opacity-60"
           >
-            {loading ? "Signing in..." : "Sign In →"}
+            {loading ? "Đang đăng nhập..." : "Đăng Nhập →"}
           </button>
 
-          <div className="text-center">
-            <p className="text-xs text-[#6d3018]/50">
-              Default: admin@cupffee.me / admin123
-            </p>
-          </div>
         </form>
       </div>
     </div>

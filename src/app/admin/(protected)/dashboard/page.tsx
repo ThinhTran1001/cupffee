@@ -27,28 +27,28 @@ export default async function AdminDashboardPage() {
 
   const stats = [
     {
-      label: "Total Products",
+      label: "Tổng Sản Phẩm",
       value: productCount,
       icon: "📦",
       href: "/admin/products",
       color: "bg-blue-50 text-blue-700",
     },
     {
-      label: "Approved Reviews",
+      label: "Đánh Giá Đã Duyệt",
       value: reviewCount,
       icon: "⭐",
       href: "/admin/reviews",
       color: "bg-yellow-50 text-yellow-700",
     },
     {
-      label: "Unread Messages",
+      label: "Tin Nhắn Chưa Đọc",
       value: messageCount,
       icon: "💬",
       href: "/admin/messages",
       color: "bg-green-50 text-green-700",
     },
     {
-      label: "Pending Reviews",
+      label: "Đánh Giá Chờ Duyệt",
       value: pendingReviews,
       icon: "⏳",
       href: "/admin/reviews",
@@ -59,10 +59,9 @@ export default async function AdminDashboardPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Tổng Quan</h1>
         <p className="text-gray-500 mt-1">
-          Welcome back, {session?.user?.name || "Admin"}! Here&#39;s what&#39;s
-          happening.
+          Chào mừng trở lại, {session?.user?.name || "Admin"}! Dưới đây là tình hình hiện tại.
         </p>
       </div>
 
@@ -78,7 +77,7 @@ export default async function AdminDashboardPage() {
               <span
                 className={`text-xs font-semibold px-2 py-0.5 rounded-full ${stat.color}`}
               >
-                View all
+                Xem tất cả
               </span>
             </div>
             <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
@@ -90,18 +89,18 @@ export default async function AdminDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="font-bold text-gray-900">Pending Reviews</h2>
+            <h2 className="font-bold text-gray-900">Đánh Giá Chờ Duyệt</h2>
             <Link
               href="/admin/reviews"
               className="text-sm text-[#6d3018] hover:underline font-medium"
             >
-              View All →
+              Xem Tất Cả →
             </Link>
           </div>
           {recentReviews.length === 0 ? (
             <div className="p-8 text-center text-gray-400">
               <div className="text-3xl mb-2">✅</div>
-              <p className="text-sm">No pending reviews</p>
+              <p className="text-sm">Không có đánh giá chờ duyệt</p>
             </div>
           ) : (
             <div className="divide-y divide-gray-50">
@@ -137,18 +136,18 @@ export default async function AdminDashboardPage() {
 
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="font-bold text-gray-900">Recent Messages</h2>
+            <h2 className="font-bold text-gray-900">Tin Nhắn Gần Đây</h2>
             <Link
               href="/admin/messages"
               className="text-sm text-[#6d3018] hover:underline font-medium"
             >
-              View All →
+              Xem Tất Cả →
             </Link>
           </div>
           {recentMessages.length === 0 ? (
             <div className="p-8 text-center text-gray-400">
               <div className="text-3xl mb-2">📭</div>
-              <p className="text-sm">No messages yet</p>
+              <p className="text-sm">Chưa có tin nhắn nào</p>
             </div>
           ) : (
             <div className="divide-y divide-gray-50">
@@ -185,13 +184,13 @@ export default async function AdminDashboardPage() {
           href="/admin/products/new"
           className="bg-[#6d3018] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#8b4513] transition-colors flex items-center gap-2"
         >
-          <span>+</span> Add New Product
+          <span>+</span> Thêm Sản Phẩm Mới
         </Link>
         <Link
           href="/admin/reviews"
           className="bg-white text-[#6d3018] border border-[#6d3018] px-6 py-3 rounded-xl font-semibold hover:bg-[#f6ece0] transition-colors"
         >
-          Manage Reviews
+          Quản Lý Đánh Giá
         </Link>
       </div>
     </div>

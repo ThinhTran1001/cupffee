@@ -6,12 +6,12 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 
 const navItems = [
-  { href: "/admin/dashboard", icon: "📊", label: "Dashboard" },
-  { href: "/admin/products", icon: "📦", label: "Products" },
-  { href: "/admin/reviews", icon: "⭐", label: "Reviews" },
-  { href: "/admin/orders", icon: "🛒", label: "Orders" },
-  { href: "/admin/messages", icon: "💬", label: "Messages" },
-  { href: "/admin/blog", icon: "📝", label: "Blog Posts" },
+  { href: "/admin/dashboard", icon: "📊", label: "Tổng Quan" },
+  { href: "/admin/products", icon: "📦", label: "Sản Phẩm" },
+  { href: "/admin/reviews", icon: "⭐", label: "Đánh Giá" },
+  { href: "/admin/orders", icon: "🛒", label: "Đơn Hàng" },
+  { href: "/admin/messages", icon: "💬", label: "Tin Nhắn" },
+  { href: "/admin/blog", icon: "📝", label: "Bài Viết" },
 ];
 
 export default function AdminSidebar() {
@@ -32,7 +32,7 @@ export default function AdminSidebar() {
           </div>
           <div>
             <div className="text-white font-bold text-sm">CUPFFEE</div>
-            <div className="text-[#c8956c] text-xs">Admin Panel</div>
+            <div className="text-[#c8956c] text-xs">Phân Hệ Quản Trị</div>
           </div>
         </Link>
       </div>
@@ -63,13 +63,13 @@ export default function AdminSidebar() {
           target="_blank"
           className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[#c8956c] hover:bg-[#6d3018]/40 hover:text-white transition-all"
         >
-          <span>🌐</span> View Site
+          <span>🌐</span> Xem Trang Chủ
         </Link>
         <button
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
           className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[#c8956c] hover:bg-red-900/40 hover:text-red-300 transition-all text-left"
         >
-          <span>🚪</span> Sign Out
+          <span>🚪</span> Đăng Xuất
         </button>
       </div>
     </aside>
