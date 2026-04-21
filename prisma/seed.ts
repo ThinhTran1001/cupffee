@@ -164,7 +164,6 @@ async function main() {
       create: product,
     });
   }
-
   console.log("✅ Products seeded");
 
   const reviews = [

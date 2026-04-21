@@ -7,9 +7,9 @@ type Category = { id: string; name: string; slug: string };
 
 const PRICE_OPTIONS = [
   { label: "Tất cả", min: null, max: null },
-  { label: "Dưới €10", min: null, max: "10" },
-  { label: "€10 – €20", min: "10", max: "20" },
-  { label: "Trên €20", min: "20", max: null },
+  { label: "Dưới 260.000đ", min: null, max: "10" },
+  { label: "260.000đ – 520.000đ", min: "10", max: "20" },
+  { label: "Trên 520.000đ", min: "20", max: null },
 ] as const;
 
 function Chevron({ open }: { open: boolean }) {
