@@ -75,15 +75,22 @@ export async function POST(req: Request) {
         totalItems,
         notes: notes || null,
         items: {
-          create: validLines.map((line) => {
+          create: validLines.flatMap((line) => {
             const p = productMap.get(line.productId)!;
-            return {
+            return Array.from({ length: line.quantity }).map(() => ({
               productId: p.id,
               productName: p.name,
               unitPriceVnd: convertEurToVnd(p.price),
-              quantity: line.quantity,
+              quantity: 1,
               imageUrl: p.imageUrl,
-            };
+              qrMessage: {
+                create: {
+                  content: `Cảm ơn bạn đã sử dụng sản phẩm ${p.name} từ CUPFFEE!`,
+                  fontSize: 20,
+                  color: "#4a2c20",
+                },
+              },
+            }));
           }),
         },
       },

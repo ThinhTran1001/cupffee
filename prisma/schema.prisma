@@ -86,11 +86,12 @@ model ContactMessage {
 
 /// Lời nhắn gắn với một mã QR — mỗi bản ghi một link riêng /m/[id]
 model QrMessage {
-  id        String   @id @default(cuid())
-  content   String   @db.Text
-  fontSize  Int      @default(16)
-  color     String   @default("#4a2c20")
-  createdAt DateTime @default(now())
+  id        String     @id @default(cuid())
+  content   String     @db.Text
+  fontSize  Int        @default(16)
+  color     String     @default("#4a2c20")
+  createdAt DateTime   @default(now())
+  orderItem OrderItem?
 }
 
 model Order {
@@ -113,8 +114,10 @@ model OrderItem {
   unitPriceVnd  Int
   quantity      Int
   imageUrl      String?
+  qrMessageId   String?  @unique
   createdAt     DateTime @default(now())
   order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  qrMessage     QrMessage? @relation(fields: [qrMessageId], references: [id])
 
   @@index([orderId])
 }

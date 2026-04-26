@@ -38,9 +38,31 @@ export default function CartPageClient({
 
   const resolveCart = useCallback(async () => {
     const raw = readCart();
-    const out: ResolvedLine[] = [];
 
-    for (const line of raw) {
+    const missingProductIds = [
+      ...new Set(
+        raw.filter((l) => !l.name || !l.price).map((l) => l.productId)
+      ),
+    ];
+
+    const productDataMap = new Map();
+
+    if (missingProductIds.length > 0) {
+      await Promise.all(
+        missingProductIds.map(async (id) => {
+          try {
+            const res = await fetch(`/api/storefront/product/${id}`);
+            if (res.ok) {
+              productDataMap.set(id, await res.json());
+            }
+          } catch {
+            /* ignore */
+          }
+        })
+      );
+    }
+
+    const out: ResolvedLine[] = raw.map((line) => {
       let name = line.name ?? "";
       // Backward compatible: older carts may still store EUR unit price.
       let unitPriceVnd =
@@ -51,33 +73,22 @@ export default function CartPageClient({
           : 0;
       let imageUrl: string | null = line.imageUrl ?? null;
 
-      if (!name || !line.price) {
-        try {
-          const res = await fetch(`/api/storefront/product/${line.productId}`);
-          if (res.ok) {
-            const p = (await res.json()) as {
-              name: string;
-              price: number;
-              imageUrl: string | null;
-            };
-            name = p.name;
-            unitPriceVnd = convertEurToVnd(p.price);
-            imageUrl = p.imageUrl;
-          }
-        } catch {
-          /* ignore */
-        }
+      const fetched = productDataMap.get(line.productId);
+      if (fetched) {
+        name = fetched.name;
+        unitPriceVnd = convertEurToVnd(fetched.price);
+        imageUrl = fetched.imageUrl;
       }
 
       if (!name) name = "Sản phẩm";
 
-      out.push({
+      return {
         ...line,
         name,
         unitPriceVnd,
         imageUrl,
-      });
-    }
+      };
+    });
 
     setLines(out);
     setLoading(false);

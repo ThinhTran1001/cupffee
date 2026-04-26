@@ -1,8 +1,16 @@
 import { prisma } from "@/lib/prisma";
 import { formatPriceVnd } from "@/lib/formatPrice";
+import { QRCodeSVG } from "qrcode.react";
+import { headers } from "next/headers";
 
 export default async function AdminOrdersPage() {
+  const headersList = await headers();
+  const host = headersList.get("host") || "localhost:3000";
+  const protocol = host.includes("localhost") ? "http" : "https";
+  const baseUrl = `${protocol}://${host}`;
+
   const orders = await prisma.order.findMany({
+    take: 50,
     include: {
       items: true,
     },
@@ -12,7 +20,7 @@ export default async function AdminOrdersPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Quản Lí Đơn Hàng</h1>
         <p className="text-gray-500 mt-1">
           {orders.length} đơn hàng
         </p>
@@ -48,21 +56,44 @@ export default async function AdminOrdersPage() {
                 </div>
               </div>
 
-              <div className="mt-4 space-y-2">
+              <div className="mt-4 space-y-4">
                 {order.items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between gap-3 text-sm"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm bg-gray-50 p-4 rounded-xl"
                   >
-                    <div className="min-w-0">
-                      <p className="font-semibold text-gray-900">{item.productName}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-900 mb-1">{item.productName}</p>
                       <p className="text-gray-500">
                         SL: {item.quantity} x {formatPriceVnd(item.unitPriceVnd)}
                       </p>
+                      <p className="font-bold text-[#6d3018] tabular-nums mt-1">
+                        Tổng cộng: {formatPriceVnd(item.unitPriceVnd * item.quantity)}
+                      </p>
                     </div>
-                    <p className="font-bold text-[#6d3018] tabular-nums">
-                      {formatPriceVnd(item.unitPriceVnd * item.quantity)}
-                    </p>
+                    {item.qrMessageId && (
+                      <div className="flex items-center gap-4 bg-white p-2 rounded-lg border border-gray-200 shadow-sm shrink-0">
+                        <QRCodeSVG
+                          value={`${baseUrl}/m/${item.qrMessageId}`}
+                          size={64}
+                          level="M"
+                          includeMargin
+                          fgColor="#4a2c20"
+                          bgColor="#ffffff"
+                        />
+                        <div className="max-w-[150px]">
+                          <p className="text-xs font-semibold text-gray-900">QR Sản Phẩm</p>
+                          <a
+                            href={`${baseUrl}/m/${item.qrMessageId}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-[10px] text-blue-600 hover:underline break-all"
+                          >
+                            Tới link
+                          </a>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
