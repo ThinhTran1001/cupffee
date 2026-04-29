@@ -27,12 +27,21 @@ export async function POST(req: NextRequest) {
 
     const rawColor = typeof body.color === "string" ? body.color : "#4a2c20";
     const color = /^#[0-9A-Fa-f]{6}$/.test(rawColor) ? rawColor : "#4a2c20";
+    
+    let imageUrl = typeof body.imageUrl === "string" ? body.imageUrl : null;
+    if (imageUrl === "") imageUrl = null;
 
-    const msg = await prisma.qrMessage.create({
+    if (!body.id) {
+        return NextResponse.json({ error: "Missing message ID" }, { status: 400 });
+    }
+
+    const msg = await prisma.qrMessage.update({
+      where: { id: body.id },
       data: {
         content,
         fontSize,
         color,
+        imageUrl
       },
     });
 

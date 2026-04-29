@@ -133,7 +133,7 @@ export default function CartPageClient({
           })),
         }),
       });
-      const data = (await res.json()) as { code?: string; error?: string };
+      const data = (await res.json()) as { id?: string; code?: string; error?: string };
       if (!res.ok) {
         throw new Error(data.error || "Không tạo được đơn hàng.");
       }
@@ -141,7 +141,7 @@ export default function CartPageClient({
       clearCart();
       setLines([]);
       setOrderCode(data.code ?? null);
-      router.push("/order/qr");
+      router.push(`/order/qr?orderId=${data.id}`);
     } catch (error) {
       setOrderError(
         error instanceof Error ? error.message : "Đã xảy ra lỗi khi đặt hàng."
@@ -204,13 +204,13 @@ export default function CartPageClient({
                   <tbody>
                     {lines.map((line) => (
                       <tr
-                        key={line.productId}
+                        key={line.id || line.productId}
                         className="border-b border-[#e8dfd6] last:border-0"
                       >
                         <td className="align-middle py-6 pl-4">
                           <button
                             type="button"
-                            onClick={() => removeFromCart(line.productId)}
+                            onClick={() => removeFromCart(line.id || line.productId)}
                             className="flex h-9 w-9 items-center justify-center rounded-full bg-[#4a2c20] text-lg leading-none text-white shadow-sm transition hover:bg-[#3d2418]"
                             aria-label="Xóa sản phẩm"
                           >
@@ -250,7 +250,7 @@ export default function CartPageClient({
                                 className="flex h-10 w-10 items-center justify-center text-lg font-medium text-[#4a2c20] transition hover:bg-[#ded9d3]"
                                 onClick={() =>
                                   setCartLineQuantity(
-                                    line.productId,
+                                    line.id || line.productId,
                                     line.quantity - 1
                                   )
                                 }
@@ -266,7 +266,7 @@ export default function CartPageClient({
                                 className="flex h-10 w-10 items-center justify-center text-lg font-medium text-[#4a2c20] transition hover:bg-[#ded9d3]"
                                 onClick={() =>
                                   setCartLineQuantity(
-                                    line.productId,
+                                    line.id || line.productId,
                                     line.quantity + 1
                                   )
                                 }

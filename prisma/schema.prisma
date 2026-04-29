@@ -90,6 +90,7 @@ model QrMessage {
   content   String     @db.Text
   fontSize  Int        @default(16)
   color     String     @default("#4a2c20")
+  imageUrl  String?
   createdAt DateTime   @default(now())
   orderItem OrderItem?
 }

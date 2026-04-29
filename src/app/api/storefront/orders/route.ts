@@ -85,7 +85,7 @@ export async function POST(req: Request) {
               imageUrl: p.imageUrl,
               qrMessage: {
                 create: {
-                  content: `Cảm ơn bạn đã sử dụng sản phẩm ${p.name} từ CUPFFEE!`,
+                  content: "",
                   fontSize: 20,
                   color: "#4a2c20",
                 },

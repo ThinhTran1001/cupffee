@@ -1,12 +1,15 @@
 export const CART_UPDATE_EVENT = "cupffee-cart-update";
 
 export type CartLine = {
+  id?: string;
   productId: string;
   quantity: number;
   /** Tên và đơn giá hiển thị trong giỏ (VND) */
   name?: string;
   price?: number;
   imageUrl?: string | null;
+  qrMessage?: string;
+  qrImageUrl?: string | null;
 };
 
 const KEY = "cupffee-cart";
@@ -29,7 +32,10 @@ export function readCart(): CartLine[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter(isCartLine);
+    return parsed.filter(isCartLine).map(l => ({
+      ...l,
+      id: l.id || Math.random().toString(36).slice(2)
+    }));
   } catch {
     return [];
   }
@@ -44,6 +50,8 @@ export type CartLineMeta = {
   name?: string;
   price?: number;
   imageUrl?: string | null;
+  qrMessage?: string;
+  qrImageUrl?: string | null;
 };
 
 export function addToCart(
@@ -52,14 +60,18 @@ export function addToCart(
   meta?: CartLineMeta
 ) {
   const cart = readCart();
-  const idx = cart.findIndex((l) => l.productId === productId);
   const mergedMeta = meta
     ? {
         ...(meta.name != null ? { name: meta.name } : {}),
         ...(meta.price != null ? { price: meta.price } : {}),
         ...(meta.imageUrl !== undefined ? { imageUrl: meta.imageUrl } : {}),
+        ...(meta.qrMessage !== undefined ? { qrMessage: meta.qrMessage } : {}),
+        ...(meta.qrImageUrl !== undefined ? { qrImageUrl: meta.qrImageUrl } : {}),
       }
     : {};
+  const idx = cart.findIndex(
+    (l) => l.productId === productId && l.qrMessage === meta?.qrMessage && l.qrImageUrl === meta?.qrImageUrl
+  );
   if (idx >= 0) {
     const prev = cart[idx];
     cart[idx] = {
@@ -69,6 +81,7 @@ export function addToCart(
     };
   } else {
     cart.push({
+      id: Math.random().toString(36).slice(2),
       productId,
       quantity,
       ...mergedMeta,
@@ -77,17 +90,17 @@ export function addToCart(
   writeCart(cart);
 }
 
-export function removeFromCart(productId: string) {
-  writeCart(readCart().filter((l) => l.productId !== productId));
+export function removeFromCart(id: string) {
+  writeCart(readCart().filter((l) => l.id !== id && l.productId !== id)); // fallback to productId removal just in case
 }
 
-export function setCartLineQuantity(productId: string, quantity: number) {
+export function setCartLineQuantity(id: string, quantity: number) {
   if (quantity < 1) {
-    removeFromCart(productId);
+    removeFromCart(id);
     return;
   }
   const cart = readCart();
-  const idx = cart.findIndex((l) => l.productId === productId);
+  const idx = cart.findIndex((l) => l.id === id || l.productId === id);
   if (idx < 0) return;
   cart[idx] = { ...cart[idx], quantity };
   writeCart(cart);

@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const msg = await prisma.qrMessage.findUnique({
     where: { id },
-    select: { content: true },
+    select: { content: true, imageUrl: true },
   });
   if (!msg) return { title: "Không tìm thấy" };
   const preview =
@@ -35,6 +35,7 @@ export default async function QrMessagePage({ params }: Props) {
       fontSize={msg.fontSize}
       color={msg.color}
       createdAt={msg.createdAt}
+      imageUrl={msg.imageUrl}
     />
   );
 }

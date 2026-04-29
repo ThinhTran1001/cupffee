@@ -6,6 +6,7 @@ type Props = {
   fontSize: number;
   color: string;
   createdAt: Date;
+  imageUrl?: string | null;
 };
 
 export default function QrMessageView({
@@ -13,6 +14,7 @@ export default function QrMessageView({
   fontSize,
   color,
   createdAt,
+  imageUrl,
 }: Props) {
   const formatted = createdAt.toLocaleDateString("vi-VN", {
     weekday: "long",
@@ -76,6 +78,12 @@ export default function QrMessageView({
             >
               {content}
             </p>
+            {imageUrl && (
+              <div className="mt-8 relative w-full aspect-video rounded-xl overflow-hidden shadow-sm">
+                {/* We use standard img because we don't know dimensions, or we can use next/image with object-contain */}
+                <img src={imageUrl} alt="Đính kèm" className="w-full h-full object-contain bg-neutral-100" loading="lazy" />
+              </div>
+            )}
           </div>
 
           <div className="mt-10 flex flex-col items-center gap-1 border-t border-[#efe8e0] pt-8 text-center">
