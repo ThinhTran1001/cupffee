@@ -77,7 +77,13 @@ export default function CartPageClient({
       if (fetched) {
         name = fetched.name;
         unitPriceVnd = convertEurToVnd(fetched.price);
-        imageUrl = fetched.imageUrl;
+        imageUrl =
+          fetched.imageUrl ||
+          (fetched.images && fetched.images.length > 0
+            ? fetched.images[0]
+            : null) ||
+          line.imageUrl ||
+          null;
       }
 
       if (!name) name = "Sản phẩm";

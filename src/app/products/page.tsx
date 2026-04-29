@@ -17,6 +17,7 @@ function serializeProduct(p: {
   volume: number;
   unit: string;
   imageUrl: string | null;
+  images?: string[];
   featured: boolean;
   category: { name: string } | null;
 }): ListingProduct {
@@ -27,7 +28,7 @@ function serializeProduct(p: {
     price: p.price,
     volume: p.volume,
     unit: p.unit,
-    imageUrl: p.imageUrl,
+    imageUrl: p.imageUrl || (p.images && p.images[0]) || null,
     featured: p.featured,
     categoryName: p.category?.name ?? null,
   };
@@ -83,6 +84,7 @@ export default async function ProductsPage({
         volume: true,
         unit: true,
         imageUrl: true,
+        images: true,
         featured: true,
         category: {
           select: { name: true },

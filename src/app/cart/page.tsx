@@ -18,6 +18,7 @@ function toListingProduct(p: {
   volume: number;
   unit: string;
   imageUrl: string | null;
+  images?: string[];
   featured: boolean;
   category: { name: string } | null;
 }): ListingProduct {
@@ -28,7 +29,7 @@ function toListingProduct(p: {
     price: p.price,
     volume: p.volume,
     unit: p.unit,
-    imageUrl: p.imageUrl,
+    imageUrl: p.imageUrl || (p.images && p.images[0]) || null,
     featured: p.featured,
     categoryName: p.category?.name ?? null,
   };

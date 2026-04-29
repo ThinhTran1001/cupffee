@@ -14,6 +14,7 @@ export async function GET(
       name: true,
       price: true,
       imageUrl: true,
+      images: true,
     },
   });
 

@@ -71,29 +71,29 @@ export default async function AdminOrdersPage() {
                         Tổng cộng: {formatPriceVnd(item.unitPriceVnd * item.quantity)}
                       </p>
                     </div>
-                    {item.qrMessageId && (
-                      <div className="flex items-center gap-4 bg-white p-2 rounded-lg border border-gray-200 shadow-sm shrink-0">
-                        <QRCodeSVG
-                          value={`${baseUrl}/m/${item.qrMessageId}`}
-                          size={64}
-                          level="M"
-                          includeMargin
-                          fgColor="#4a2c20"
-                          bgColor="#ffffff"
-                        />
-                        <div className="max-w-[150px]">
-                          <p className="text-xs font-semibold text-gray-900">QR Sản Phẩm</p>
-                          <a
-                            href={`${baseUrl}/m/${item.qrMessageId}`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-[10px] text-blue-600 hover:underline break-all"
-                          >
-                            Tới link
-                          </a>
-                        </div>
+                    <div className="flex items-center gap-4 bg-white p-2 rounded-lg border border-gray-200 shadow-sm shrink-0">
+                      <QRCodeSVG
+                        value={item.qrMessageId ? `${baseUrl}/m/${item.qrMessageId}` : `${baseUrl}/products/${item.productId}`}
+                        size={64}
+                        level="M"
+                        includeMargin
+                        fgColor="#4a2c20"
+                        bgColor="#ffffff"
+                      />
+                      <div className="max-w-[150px]">
+                        <p className="text-xs font-semibold text-gray-900">
+                          {item.qrMessageId ? "QR Sản Phẩm" : "QR Mặc Định"}
+                        </p>
+                        <a
+                          href={item.qrMessageId ? `${baseUrl}/m/${item.qrMessageId}` : `${baseUrl}/products/${item.productId}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[10px] text-blue-600 hover:underline break-all"
+                        >
+                          Tới link
+                        </a>
                       </div>
-                    )}
+                    </div>
                   </div>
                 ))}
               </div>
