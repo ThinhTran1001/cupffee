@@ -12,6 +12,7 @@
     "db:push": "prisma db push",
     "db:seed": "npm run db:generate && npx ts-node prisma/seed.ts",
     "db:studio": "prisma studio",
+    "db:deploy": "prisma migrate deploy",
     "prisma:migrate:deploy": "prisma migrate deploy"
   },
   "prisma": {
