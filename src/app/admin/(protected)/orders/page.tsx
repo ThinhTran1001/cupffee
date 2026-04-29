@@ -12,7 +12,11 @@ export default async function AdminOrdersPage() {
   const orders = await prisma.order.findMany({
     take: 50,
     include: {
-      items: true,
+      items: {
+        include: {
+          qrMessage: true,
+        },
+      },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -71,29 +75,32 @@ export default async function AdminOrdersPage() {
                         Tổng cộng: {formatPriceVnd(item.unitPriceVnd * item.quantity)}
                       </p>
                     </div>
-                    <div className="flex items-center gap-4 bg-white p-2 rounded-lg border border-gray-200 shadow-sm shrink-0">
-                      <QRCodeSVG
-                        value={item.qrMessageId ? `${baseUrl}/m/${item.qrMessageId}` : `${baseUrl}/products/${item.productId}`}
-                        size={64}
-                        level="M"
-                        includeMargin
-                        fgColor="#4a2c20"
-                        bgColor="#ffffff"
-                      />
-                      <div className="max-w-[150px]">
-                        <p className="text-xs font-semibold text-gray-900">
-                          {item.qrMessageId ? "QR Sản Phẩm" : "QR Mặc Định"}
-                        </p>
-                        <a
-                          href={item.qrMessageId ? `${baseUrl}/m/${item.qrMessageId}` : `${baseUrl}/products/${item.productId}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-[10px] text-blue-600 hover:underline break-all"
-                        >
-                          Tới link
-                        </a>
+                    {item.qrMessage && (
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white p-3 rounded-lg border border-gray-200 shadow-sm shrink-0">
+                        <QRCodeSVG
+                          value={`${baseUrl}/m/${item.qrMessageId}`}
+                          size={64}
+                          level="M"
+                          includeMargin
+                          fgColor="#4a2c20"
+                          bgColor="#ffffff"
+                        />
+                        <div className="max-w-[250px] space-y-1">
+                          <p className="text-xs font-semibold text-gray-900">QR Lời Nhắn:</p>
+                          <p className="text-xs text-gray-600 line-clamp-3 italic">
+                            &quot;{item.qrMessage.content}&quot;
+                          </p>
+                          <a
+                            href={`${baseUrl}/m/${item.qrMessageId}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-[10px] text-blue-600 hover:underline break-all block pt-1"
+                          >
+                            Mở trang lời nhắn
+                          </a>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>
