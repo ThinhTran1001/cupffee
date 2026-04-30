@@ -107,6 +107,7 @@ export default async function BlogPostPage({
           year: "numeric",
           month: "long",
           day: "2-digit",
+          timeZone: "Asia/Ho_Chi_Minh",
         }) ?? "",
       content: dbPost.content,
       excerpt: dbPost.excerpt,

@@ -49,7 +49,7 @@ export default async function AdminReviewsPage() {
                   &ldquo;{review.content}&rdquo;
                 </p>
                 <div className="text-xs text-gray-400 mb-4">
-                  {new Date(review.createdAt).toLocaleDateString()}
+                  {new Date(review.createdAt).toLocaleDateString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })}
                   {review.email && ` · ${review.email}`}
                 </div>
                 <AdminReviewActions

@@ -63,6 +63,7 @@ export default async function AdminMessagesPage() {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
+                      timeZone: "Asia/Ho_Chi_Minh"
                     })}
                   </span>
                   <AdminMessageActions messageId={msg.id} read={msg.read} />

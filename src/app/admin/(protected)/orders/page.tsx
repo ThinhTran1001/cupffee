@@ -55,7 +55,7 @@ export default async function AdminOrdersPage() {
                 <div className="text-right">
                   <p className="text-xs text-gray-500">Thời gian</p>
                   <p className="text-sm font-medium text-gray-800">
-                    {new Date(order.createdAt).toLocaleString("vi-VN")}
+                    {new Date(order.createdAt).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })}
                   </p>
                 </div>
               </div>

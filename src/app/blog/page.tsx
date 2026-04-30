@@ -57,6 +57,7 @@ export default async function BlogPage() {
         year: "numeric",
         month: "short",
         day: "2-digit",
+        timeZone: "Asia/Ho_Chi_Minh"
       }) ?? "",
       excerpt: p.excerpt,
       slug: p.slug,

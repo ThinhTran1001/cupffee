@@ -169,7 +169,7 @@ export default async function AdminDashboardPage() {
                       </p>
                     </div>
                     <div className="text-xs text-gray-400 flex-shrink-0">
-                      {new Date(msg.createdAt).toLocaleDateString()}
+                      {new Date(msg.createdAt).toLocaleDateString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })}
                     </div>
                   </div>
                 </div>

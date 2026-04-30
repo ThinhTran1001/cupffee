@@ -21,10 +21,12 @@ export default function QrMessageView({
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "Asia/Ho_Chi_Minh",
   });
   const timeFormatted = createdAt.toLocaleTimeString("vi-VN", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Asia/Ho_Chi_Minh",
   });
 
   return (
